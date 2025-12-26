@@ -1,5 +1,6 @@
 #include <iostream>
 #include <raylib.h>
+#include <random>
 
 int main() {
     constexpr int screenWidth = 1920;
@@ -13,10 +14,19 @@ int main() {
     int playerY = 800;
     int velocityX = 0;
 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(100, screenWidth - 100);
+
+    int baguetteX = distrib(gen);
+    int baguetteY = 0;
+
     while (!WindowShouldClose()) {
         BeginDrawing();
 
         ClearBackground(BLUE);
+
+        #pragma region player
 
         DrawRectangle(playerX, playerY, 100, 100, RED);
 
@@ -33,6 +43,11 @@ int main() {
         } else if (velocityX < 0) {
             velocityX += 1;
         }
+
+        #pragma endregion
+
+        DrawRectangle(baguetteX, baguetteY, 100, 100, ORANGE);
+        baguetteY += 2;
 
         EndDrawing();
     }
