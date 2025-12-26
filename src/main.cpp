@@ -9,10 +9,30 @@ int main() {
 
     SetTargetFPS(60);
 
+    int playerX = 800;
+    int playerY = 800;
+    int velocityX = 0;
+
     while (!WindowShouldClose()) {
         BeginDrawing();
 
         ClearBackground(BLUE);
+
+        DrawRectangle(playerX, playerY, 100, 100, RED);
+
+        if (IsKeyDown(KEY_A) && velocityX > -20) {
+            velocityX -= 5;
+        } else if (IsKeyDown(KEY_D) && velocityX < 20) {
+            velocityX += 5;
+        }
+
+        playerX += velocityX;
+
+        if (velocityX > 0) {
+            velocityX -= 1;
+        } else if (velocityX < 0) {
+            velocityX += 1;
+        }
 
         EndDrawing();
     }
