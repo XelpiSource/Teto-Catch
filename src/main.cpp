@@ -18,6 +18,13 @@ int main() {
 
     SetTargetFPS(60);
 
+    // Audio
+    InitAudioDevice();
+    Sound tetoSfx = LoadSound(RESOURCES_PATH "tetoo.mp3");
+    Sound tetoOhNoSfx = LoadSound(RESOURCES_PATH "teto-oh-no.mp3");
+    Music bgm = LoadMusicStream(RESOURCES_PATH "background-music.mp3");
+    PlayMusicStream(bgm);
+
     // random X coord for baguette
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -52,7 +59,11 @@ int main() {
     Rectangle sourceRecBaguette = { 0.0f, 0.0f, static_cast<float>(baguetteTx.width), static_cast<float>(baguetteTx.height) };
     Rectangle destRecBaguette = { static_cast<float>(baguetteX), static_cast<float>(baguetteY), 200, 200 };
 
+    ToggleBorderlessWindowed();
+
     while (!WindowShouldClose()) {
+
+        UpdateMusicStream(bgm);
 
         BeginTextureMode(target);
 
@@ -103,6 +114,7 @@ int main() {
 
         if (baguetteY >= playerY - 50 && baguetteX >= playerX && baguetteX <= playerX + 200) {
             baguetteCount++;
+            PlaySound(tetoSfx);
 
             if (baguetteSpeed < 5) {
                 baguetteSpeed++;
@@ -114,6 +126,7 @@ int main() {
             destRecBaguette.y = static_cast<float>(baguetteY);
 
         } else if (baguetteY > logHeight - 100) {
+            PlaySound(tetoOhNoSfx);
             baguetteCount = 0;
             baguetteSpeed = 1;
             baguetteX = distrib(gen);
@@ -162,6 +175,9 @@ int main() {
 
     #pragma endregion
     }
+
+    UnloadSound(tetoSfx);
+    CloseAudioDevice();
 
     return 0;
 }
