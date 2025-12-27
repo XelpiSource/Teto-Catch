@@ -6,15 +6,22 @@
 int main() {
     constexpr int screenWidth = 1920;
     constexpr int screenHeight = 1080;
+    constexpr int logWidth = 1920;
+    constexpr int logHeight = 1080;
 
+    bool isFullscreen = false;
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenWidth, screenHeight, "Teto Catch");
+
+    RenderTexture2D target = LoadRenderTexture(logWidth, logHeight);
+    SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
     SetTargetFPS(60);
 
     // random X coord for baguette
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(100, screenWidth - 300);
+    std::uniform_int_distribution<> distrib(100, logWidth - 300);
 
     // player data
     int playerX = 800;
@@ -32,7 +39,7 @@ int main() {
     // Background
     const Texture2D backgroundTx = LoadTexture(RESOURCES_PATH "background.png");
     Rectangle sourceRecBackground = { 0.0f, 0.0f, static_cast<float>(backgroundTx.width), static_cast<float>(backgroundTx.height) };
-    Rectangle destRecBackground = { 0.0f, 0.0f, screenWidth, screenHeight };
+    Rectangle destRecBackground = { 0.0f, 0.0f, logWidth, logHeight };
     Vector2 origin = { 0.0f, 0.0f };
 
     // Player Texture
@@ -46,20 +53,26 @@ int main() {
     Rectangle destRecBaguette = { static_cast<float>(baguetteX), static_cast<float>(baguetteY), 200, 200 };
 
     while (!WindowShouldClose()) {
-        BeginDrawing();
+
+        BeginTextureMode(target);
+
+        if (IsKeyPressed(KEY_F11)) {
+            ToggleBorderlessWindowed();
+            isFullscreen = !isFullscreen;
+        }
 
         ClearBackground(BLUE);
 
         DrawTexturePro(backgroundTx, sourceRecBackground, destRecBackground, origin, 0.0f, WHITE);
 
-        DrawText(("Score: " + std::to_string(baguetteCount)).c_str(), 10, 10, 60,WHITE);
+        DrawText(("Baguettes: " + std::to_string(baguetteCount)).c_str(), 10, 10, 60,WHITE);
 
         #pragma region player
 
         DrawTexturePro(playerTx, sourceRecPlayer, destRecPlayer, origin, 0.0f, WHITE);
 
         // to not run offscreen
-        if (playerX > screenWidth - 280) {
+        if (playerX > logWidth - 280) {
             velocityX -= 5;
         } else if (playerX < -30) {
             velocityX += 5;
@@ -100,7 +113,7 @@ int main() {
             destRecBaguette.x = static_cast<float>(baguetteX);
             destRecBaguette.y = static_cast<float>(baguetteY);
 
-        } else if (baguetteY > screenHeight - 100) {
+        } else if (baguetteY > logHeight - 100) {
             baguetteCount = 0;
             baguetteSpeed = 1;
             baguetteX = distrib(gen);
@@ -111,7 +124,43 @@ int main() {
 
         #pragma endregion
 
+        EndTextureMode();
+
+    #pragma region letterbox
+
+        BeginDrawing();
+
+        ClearBackground(BLACK);
+
+        float scale = std::min(
+            static_cast<float>(GetScreenWidth())  / logWidth,
+            static_cast<float>(GetScreenHeight()) / logHeight
+        );
+
+        float scaledWidth  = logWidth  * scale;
+        float scaledHeight = logHeight * scale;
+
+        float offsetX = (static_cast<float>(GetScreenWidth())  - scaledWidth)  / 2;
+        float offsetY = (static_cast<float>(GetScreenHeight()) - scaledHeight) / 2;
+
+        Rectangle src = {
+            0, 0,
+            static_cast<float>(target.texture.width),
+            -static_cast<float>(target.texture.height)
+        };
+
+        Rectangle dst = {
+            offsetX,
+            offsetY,
+            scaledWidth,
+            scaledHeight
+        };
+
+        DrawTexturePro(target.texture, src, dst, {0, 0}, 0, WHITE);
+
         EndDrawing();
+
+    #pragma endregion
     }
 
     return 0;
