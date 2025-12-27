@@ -29,11 +29,16 @@ int main() {
 
     // Sprites
 
+    // Background
+    const Texture2D backgroundTx = LoadTexture(RESOURCES_PATH "background.png");
+    Rectangle sourceRecBackground = { 0.0f, 0.0f, static_cast<float>(backgroundTx.width), static_cast<float>(backgroundTx.height) };
+    Rectangle destRecBackground = { 0.0f, 0.0f, screenWidth, screenHeight };
+    Vector2 origin = { 0.0f, 0.0f };
+
     // Player Texture
     const Texture2D playerTx = LoadTexture(RESOURCES_PATH "miniTeto.png");
     Rectangle sourceRecPlayer = { 0.0f, 0.0f, static_cast<float>(playerTx.width), static_cast<float>(playerTx.height) };
     Rectangle destRecPlayer = { static_cast<float>(playerX), static_cast<float>(playerY), 300, 300 };
-    Vector2 origin = { 0.0f, 0.0f };
 
     // Baguette Texture
     const Texture2D baguetteTx = LoadTexture(RESOURCES_PATH "baguette.png");
@@ -44,6 +49,8 @@ int main() {
         BeginDrawing();
 
         ClearBackground(BLUE);
+
+        DrawTexturePro(backgroundTx, sourceRecBackground, destRecBackground, origin, 0.0f, WHITE);
 
         DrawText(("Score: " + std::to_string(baguetteCount)).c_str(), 10, 10, 60,WHITE);
 
