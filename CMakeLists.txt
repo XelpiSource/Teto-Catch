@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 4.1)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Release>:Release>")
-else()
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-endif()
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build all libs static" FORCE)
 
