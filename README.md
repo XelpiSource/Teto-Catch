@@ -18,8 +18,8 @@ The game gets faster the more baguettes you catch!
 
 ## 📥 Downloading the Game
 
-1. Click the green **Code** button on this page
-2. Select **Download ZIP**
+1. Go to the **Releases** section on the right side of this page
+2. Download **Teto Catch v1.0.zip**
 3. Extract the ZIP file anywhere on your computer
 
 ---
@@ -27,8 +27,7 @@ The game gets faster the more baguettes you catch!
 ## ▶️ How to Run the Game (Windows)
 
 1. Open the extracted folder
-2. Open the `build` folder
-3. Double-click:
+2. Double-click:
 
    ```
    Give_Kasane_Teto_her_baguettes.exe
@@ -36,6 +35,7 @@ The game gets faster the more baguettes you catch!
 
 ⚠️ **Important:**
 
+* The extracted folder already contains everything needed to run the game
 * The `.exe` must stay in the **same folder** as the `resources` folder
 * Do **not** move or delete the `resources` folder or the game will not load textures or sounds
 
@@ -89,7 +89,7 @@ Give_Kasane_Teto_her_baguettes/
 
 * **Game & Code:** XelpiSource
 * **Engine:** raylib
-* **Character:** Kasane Teto
+* **Character:** Kasane Teto (fan project)
 
 ---
 
