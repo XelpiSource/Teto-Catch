@@ -87,7 +87,7 @@ Give_Kasane_Teto_her_baguettes/
 
 ## ❤️ Credits
 
-* **Game & Code:** XelpiSource
+* **Game & Code:** XelpiCode
 * **Engine:** raylib
 * **Character:** Kasane Teto (fan project)
 
